@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação Interativa</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 100vw; /* Ocupa toda a largura da tela */
+            max-width: 800px; /* Limite para telas grandes */
+            height: 56vw; /* Mantém a proporção 16:9 */
+            max-height: 450px; /* Limite para não ultrapassar a tela */
+            background-size: cover;
+            background-position: center;
+            cursor: grab;
+            user-select: none; /* Evita seleção de texto ao interagir */
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+            background-image: url('/frame.1.png'); /* Começa no frame 1 */
+        }
+
+        .aviso {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            animation: piscar 1.5s infinite alternate;
+        }
+
+        @keyframes piscar {
+            from { opacity: 0.8; }
+            to { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="animacao"></div>
+<div class="aviso">Arraste para os lados para interagir ↔️</div>
+
+<script>
+    const container = document.getElementById("animacao");
+    const totalFrames = 35; // Número total de frames
+    let frameAtual = 1; // Inicia no frame 1
+    let ultimoFrame = -1; // Evita atualização desnecessária
+
+    function atualizarFrame(posicaoX, largura) {
+        let novoFrame = Math.floor((posicaoX / largura) * totalFrames);
+        novoFrame = Math.max(1, Math.min(novoFrame, totalFrames)); // Mantém dentro do intervalo válido
+
+        if (novoFrame !== ultimoFrame) { // Apenas atualiza se o frame mudar
+            frameAtual = novoFrame;
+            container.style.backgroundImage = `url('/frame.${frameAtual}.png')`;
+            ultimoFrame = novoFrame;
+        }
+    }
+
+    // Evento para mouse
+    container.addEventListener("mousemove", (event) => {
+        requestAnimationFrame(() => {
+            atualizarFrame(event.offsetX, container.clientWidth);
+        });
+    });
+
+    // Evento para toque (móvel)
+    container.addEventListener("touchmove", (event) => {
+        requestAnimationFrame(() => {
+            let touch = event.touches[0]; // Captura o primeiro toque
+            let rect = container.getBoundingClientRect();
+            let posicaoX = touch.clientX - rect.left; // Converte posição do toque para a área do container
+            atualizarFrame(posicaoX, container.clientWidth);
+        });
+    });
+
+</script>
+
+</body>
+</html>
