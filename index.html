@@ -15,6 +15,7 @@
             background: #111;
             color: white;
             font-family: Arial, sans-serif;
+            text-align: center;
         }
 
         .container {
@@ -38,6 +39,13 @@
             animation: piscar 1.5s infinite alternate;
         }
 
+        .instabilidade {
+            margin-top: 5px;
+            font-size: 1rem;
+            color: #ffcc00;
+            opacity: 0.7;
+        }
+
         @keyframes piscar {
             from { opacity: 0.8; }
             to { opacity: 0.3; }
@@ -48,6 +56,7 @@
 
 <div class="container" id="animacao"></div>
 <div class="aviso">Arraste para os lados para interagir ↔️</div>
+<div class="instabilidade">⚠️ A animação pode apresentar instabilidade em alguns dispositivos.</div>
 
 <script>
     const container = document.getElementById("animacao");
